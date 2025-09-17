@@ -1,123 +1,153 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; //importerar flutter biblotek
 
-void main() {
-  runApp(MyApp());
+void main() { // Startar
+  runApp(const TodoApp()); //visar ToDoApp
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class TodoApp extends StatelessWidget { //skapar huvud-widgeten, den är också stateless, att den inte kan ändras
+  const TodoApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //bestämmer hur widgeten ska se ut
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'TIG333 TODO', // titeln på appen
+      theme: ThemeData( //temat för appen
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),//färgtema
+  useMaterial3: true, //designsystem som gör appen mer modern
+),
+
+      home: const TodoListScreen(), //sätter startsidan
+      debugShowCheckedModeBanner: false, //tar bort debug-bannern
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class TodoListScreen extends StatelessWidget {
+  const TodoListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
+    return Scaffold( //skapar en grundläggande layout för appen
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('TIG333 TODO'), //Titeln i appen
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: ListView( //skapar en scroll-lista
+        children: const [//listan med uppgifter
+          TodoItem(title: 'Skriv en bok', done: false), //false = inte klar
+          TodoItem(title: 'Gör läxor', done: false),
+          TodoItem(title: 'Städa rummet', done: true), //true = klar
+          TodoItem(title: 'Kolla på tv', done: false),
+          TodoItem(title: 'Träna', done: true),
+          TodoItem(title: 'Laga mat', done: false),
+          TodoItem(title: 'Läs en artikel', done: false),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton( //knapp för att kunna lägga till en uppgift
+  onPressed: () { //när knappen trycks
+    Navigator.push( //navigerar till en ny skärm
+      context,
+      MaterialPageRoute(builder: (context) => const AddTodoScreen()), //skärmen som öppnas är AddTodoScreen
+    );
+  },
+  child: const Icon(Icons.add), //plus-ikon på knappen
+),
+
+    );
+  }
+}
+
+class TodoItem extends StatelessWidget { //skapar en widget för varje uppgift
+  final String title;//titel på uppgiften
+  final bool done; //om uppgiften är klar eller inte
+
+  const TodoItem({super.key, required this.title, this.done = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile( //färdig rad
+      leading: Checkbox( //checkbox för att markera om uppgiften är klar
+        value: done,
+        onChanged: null, // ingen funktion än så länge
+      ),
+      title: Text(//titel på uppgiften
+        title,
+        style: TextStyle(
+          color: const Color.fromARGB(255, 226, 118, 154),//rosa färg
+          decoration: done ? TextDecoration.lineThrough : null, //om uppgiften är klar, dra ett streck över texten
+        ),
+      ),
+      trailing: const Icon( //ikon för att ta bort uppgiften
+        Icons.close,
+      color: Color.fromARGB(255, 226, 118, 154), //även den är rosa
+      ),
+    );
+  }
+}
+
+class AddTodoScreen extends StatelessWidget { //skapar en ny skärm för att lägga till en uppgift
+  const AddTodoScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar( //appbaren högst upp
+        title: const Text('TIG333 TODO'), //titeln i appen
+      ),
+      body: Padding( //lägger till padding runt innehållet
+        padding: const EdgeInsets.all(20.0),
+        child: Column( 
+          crossAxisAlignment: CrossAxisAlignment.stretch, // gör så att knappen tar upp hela bredden
+          children: [
+            
+            TextField( //textfält för att skriva in en ny uppgift
+              decoration: InputDecoration(
+                hintText: 'Vad vill du lägga till?',
+                hintStyle: const TextStyle(color: Colors.pinkAccent), // rosa hint-text
+                filled: true,
+                fillColor: Colors.pink[50], // ljusrosa bakgrund
+                contentPadding: const EdgeInsets.symmetric( // padding inuti textfältet
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder( // rundade hörn på textfältet
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.pink), // rosa kant
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16), 
+                  borderSide: const BorderSide(color: Colors.pinkAccent, width: 2), // rosa kant
+                ),
+              ),
+              style: const TextStyle(color: Colors.pink), // rosa text
+            ),
+            const SizedBox(height: 20), // mellanrum mellan textfältet och knappen
+
+            
+            ElevatedButton.icon( //knapp med ikon för att lägga till uppgiften
+              onPressed: () { //när knappen trycks
+                
+              },
+              icon: const Icon(Icons.add, color: Colors.white), // vit plus-ikon
+              label: const Text(
+                'ADD', // texten på knappen
+                style: TextStyle(
+                  fontSize: 18, //storlek på texten
+                  fontWeight: FontWeight.bold, //fet text
+                  color: Colors.white, // vit text
+                ),
+              ),
+              style: ElevatedButton.styleFrom( // stil på knappen
+                backgroundColor: Colors.pink, // rosa knapp
+                padding: const EdgeInsets.symmetric(vertical: 14), //padding
+                shape: RoundedRectangleBorder( // form på knappen
+                  borderRadius: BorderRadius.circular(30), // rundade hörn
+                ),
+                elevation: 4, // liten skugga
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
