@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart'; //importerar flutter biblotek
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'screens/todo_list_screen.dart';
+import 'providers/todo_provider.dart';
 
+<<<<<<< Updated upstream
 void main() { // Startar
   runApp(const TodoApp()); //visar ToDoApp
 }
@@ -7,9 +11,17 @@ void main() { // Startar
 class TodoApp extends StatelessWidget { //skapar huvud-widgeten, den är också stateless, att den inte kan ändras
   const TodoApp({super.key});
 
+=======
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+>>>>>>> Stashed changes
   @override
-  Widget build(BuildContext context) { //bestämmer hur widgeten ska se ut
+  Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< Updated upstream
       title: 'TIG333 TODO', // titeln på appen
       theme: ThemeData( //temat för appen
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),//färgtema
@@ -151,3 +163,18 @@ class AddTodoScreen extends StatelessWidget { //skapar en ny skärm för att lä
     );
   }
 }
+=======
+      title: 'TIG333 TODO',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+        useMaterial3: true,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: ChangeNotifierProvider(
+        create: (_) => TodoProvider(),
+        child: TodoListScreen(),
+      ),
+    );
+  }
+}
+>>>>>>> Stashed changes
