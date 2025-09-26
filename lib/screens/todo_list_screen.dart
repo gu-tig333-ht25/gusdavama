@@ -1,39 +1,41 @@
+//i denna fil hanteras hela todo-listan, inklusive visning, filtrering och tillägg av nya todos.
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/todo_provider.dart';
 
-class TodoListScreen extends StatefulWidget {
+class TodoListScreen extends StatefulWidget { //stateful widget
   @override
   _TodoListScreenState createState() => _TodoListScreenState();
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
   @override
-  void initState() {
+  void initState() { //init state = skapas för widgetträdet
     super.initState();
-    Future.microtask(() =>
-        Provider.of<TodoProvider>(context, listen: false).loadTodos());
+    Future.microtask(() => //säkerställer att loadTodos körs efter initState
+        Provider.of<TodoProvider>(context, listen: false).loadTodos()); //laddar in todos, listen:false laddar bara datan en gång
   }
 
   @override
-  Widget build(BuildContext context) {
-    final todoProvider = Provider.of<TodoProvider>(context);
+  Widget build(BuildContext context) { 
+    final todoProvider = Provider.of<TodoProvider>(context); //hämtar todoProvider
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar( //appbar med titel och filtreringsmeny
         backgroundColor: Colors.pink,
         title: const Text(
-          'Att göra lista',
+          'Att göra lista', //titel
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          PopupMenuButton<Filter>(
+          PopupMenuButton<Filter>( // Filtreringsmeny i appbaren
             color: Colors.pink[50],
             icon: const Icon(Icons.filter_list, color: Colors.white),
             onSelected: (Filter filter) {
               todoProvider.setFilter(filter);
             },
-            itemBuilder: (BuildContext context) {
+            itemBuilder: (BuildContext context) { //menyval
               return [
                 const PopupMenuItem<Filter>(
                   value: Filter.all,
@@ -52,9 +54,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
           ),
         ],
       ),
-      body: todoProvider.loading
+      body: todoProvider.loading //visar en laddningsindikator medan todos laddas
           ? const Center(child: CircularProgressIndicator(color: Colors.pink))
-          : ListView.builder(
+          : ListView.builder( 
               itemCount: todoProvider.filteredTodos.length,
               itemBuilder: (ctx, index) {
                 final todo = todoProvider.filteredTodos[index];
@@ -80,7 +82,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             : TextDecoration.none,
                       ),
                     ),
-                    trailing: IconButton(
+                    trailing: IconButton( //knapp för att ta bort todo
                       icon: const Icon(Icons.close, color: Colors.pink),
                       onPressed: () => todoProvider.deleteTodo(todo),
                     ),
@@ -88,7 +90,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton( //knapp för att lägga till ny todo
         backgroundColor: Colors.pink,
         onPressed: () async {
           final newTodo = await showDialog<String>(
@@ -144,7 +146,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
             todoProvider.addTodo(newTodo);
           }
         },
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white), //ikon för knappen
       ),
     );
   }

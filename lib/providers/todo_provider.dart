@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import '../models/todo.dart';
 import '../api_service.dart';
 
-enum Filter { all, done, notDone }
+enum Filter { all, done, notDone } //filteralternativ
 
-class TodoProvider with ChangeNotifier {
+class TodoProvider with ChangeNotifier { //provider för att hantera todo-listan
   List<Todo> _todos = [];
   bool isLoading = false;
-  Filter _filter = Filter.all;
+  Filter _filter = Filter.all; //standardfilter är alla todos
 
-  List<Todo> get todos => _todos;
-  bool get loading => isLoading;
-  Filter get filter => _filter;
+  List<Todo> get todos => _todos; //getter för todos
+  bool get loading => isLoading; //denna raden kommer det upp röd text på ibland, men det funkar ändå så har inte ändrat
+  Filter get filter => _filter; //getter för filter
 
-  List<Todo> get filteredTodos {
+  List<Todo> get filteredTodos { //returnerar filtrerade todos baserat på valt filter
     switch (_filter) {
       case Filter.done:
         return _todos.where((todo) => todo.done).toList();
@@ -24,19 +24,20 @@ class TodoProvider with ChangeNotifier {
     }
   }
 
-  void setFilter(Filter filter) {
+  void setFilter(Filter filter) { 
     _filter = filter;
     notifyListeners();
   }
 
-  Future<void> loadTodos() async {
+  Future<void> loadTodos() async { //laddar todos från API:et
     isLoading = true;
     notifyListeners();
 
+     //här kommer några olika felmedelanden
     try {
       _todos = await ApiService.fetchTodos();
     } catch (e) {
-      print("❌ Fel vid hämtning: $e");
+      print("Fel vid hämtning: $e");
     }
 
     isLoading = false;
@@ -49,7 +50,7 @@ class TodoProvider with ChangeNotifier {
       _todos = newTodo;
       notifyListeners();
     } catch (e) {
-      print("❌ Fel vid addTodo: $e");
+      print("Fel vid addTodo: $e");
     }
   }
 

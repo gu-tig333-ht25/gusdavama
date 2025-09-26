@@ -1,14 +1,14 @@
+//denna fil hanterar kommunikationen med Todo API:et
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'models/todo.dart';
 
-// Din API-nyckel
 const String apiKey = "a7ce3e7f-bc6a-4268-be10-48d99bb27c63";
-// Bas-URL till Todo API
 const String baseUrl = "https://todoapp-api.apps.k8s.gu.se";
 
 class ApiService {
-  // Hämta alla todos från servern
+  //hämta alla todos
   static Future<List<Todo>> fetchTodos() async {
     final response = await http.get(Uri.parse("$baseUrl/todos?key=$apiKey"));
     if (response.statusCode == 200) {
@@ -19,7 +19,7 @@ class ApiService {
     }
   }
 
-  // Lägg till en todo
+  //lägg till en todo
   static Future<List<Todo>> addTodo(String title) async {
     final response = await http.post(
       Uri.parse("$baseUrl/todos?key=$apiKey"),
