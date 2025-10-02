@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/todo_provider.dart';
+import 'add_todo_screen.dart';
+
 
 class TodoListScreen extends StatefulWidget { //stateful widget
   @override
@@ -23,7 +25,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
     return Scaffold(
       appBar: AppBar( //appbar med titel och filtreringsmeny
-        backgroundColor: Colors.pink,
+        backgroundColor:  Colors.pink,
         title: const Text(
           'Att göra lista', //titel
           style: TextStyle(color: Colors.white),
@@ -90,64 +92,20 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton( //knapp för att lägga till ny todo
-        backgroundColor: Colors.pink,
-        onPressed: () async {
-          final newTodo = await showDialog<String>(
-            context: context,
-            builder: (BuildContext context) {
-              String title = '';
-              return AlertDialog(
-                backgroundColor: Colors.pink[100],
-                title: const Text('Lägg till ny todo',
-                    style: TextStyle(color: Colors.white)),
-                content: TextField(
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: 'Skriv här',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                  ),
-                  onChanged: (text) {
-                    title = text;
-                  },
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Tillbaka'),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.pink,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop(title);
-                    },
-                    child: const Text('Lägg till'),
-                  ),
-                ],
-              );
-            },
-          );
+      floatingActionButton: FloatingActionButton(
+  backgroundColor: Colors.pink,
+  onPressed: () async {
+    final newTodo = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (context) => AddTodoScreen()),
+    );
 
-          if (newTodo != null && newTodo.isNotEmpty) {
-            todoProvider.addTodo(newTodo);
-          }
-        },
-        child: const Icon(Icons.add, color: Colors.white), //ikon för knappen
-      ),
+    if (newTodo != null && newTodo.isNotEmpty) {
+      todoProvider.addTodo(newTodo);
+    }
+  },
+  child: const Icon(Icons.add, color: Colors.white),
+),  
     );
   }
 }
