@@ -13,9 +13,9 @@ class TodoListScreen extends StatefulWidget { //stateful widget
 
 class _TodoListScreenState extends State<TodoListScreen> {
   @override
-  void initState() { //init state = skapas för widgetträdet
+  void initState() {
     super.initState();
-    Future.microtask(() => //säkerställer att loadTodos körs efter initState
+    Future.microtask(() =>
         Provider.of<TodoProvider>(context, listen: false).loadTodos()); //laddar in todos, listen:false laddar bara datan en gång
   }
 
@@ -31,7 +31,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          PopupMenuButton<Filter>( // Filtreringsmeny i appbaren
+          PopupMenuButton<Filter>( //filtreringsmeny i appbaren
             color: Colors.pink[50],
             icon: const Icon(Icons.filter_list, color: Colors.white),
             onSelected: (Filter filter) {
