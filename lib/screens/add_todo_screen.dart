@@ -1,3 +1,5 @@
+//denna skärm används för att lägga till en ny todo
+
 import 'package:flutter/material.dart';
 
 class AddTodoScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
               controller: _controller,
               style: const TextStyle(color: Colors.pink),
               decoration: const InputDecoration(
-                labelText: 'Skriv din todo',
+                labelText: 'Skriv din todo', //prövar labelText istället för hintText
                 labelStyle: TextStyle(color: Colors.pink),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.pink),
@@ -41,7 +43,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context), // går tillbaka utan resultat
+                  onPressed: () => Navigator.pop(context), //går tillbaka utan att lägga till
                   child: const Text('Tillbaka', style: TextStyle(color: Colors.pink)),
                 ),
                 const SizedBox(width: 10),
@@ -53,7 +55,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                   onPressed: () {
                     final text = _controller.text.trim();
                     if (text.isNotEmpty) {
-                      Navigator.pop(context, text); // skickar tillbaka todo-texten
+                      Navigator.pop(context, text); //skickar tillbaka todo-texten
                     }
                   },
                   child: const Text('Lägg till'),

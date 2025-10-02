@@ -35,7 +35,7 @@ class ApiService {
     }
   }
 
-  // Uppdatera en todo
+  //uppdatera en todo
   static Future<void> updateTodo(Todo todo) async {
     final response = await http.put(
       Uri.parse("$baseUrl/todos/${todo.id}?key=$apiKey"),
@@ -48,7 +48,7 @@ class ApiService {
     }
   }
 
-  // Ta bort en todo
+  //ta bort en todo
   static Future<void> deleteTodo(String id) async {
     final response = await http.delete(
       Uri.parse("$baseUrl/todos/$id?key=$apiKey"),
