@@ -73,7 +73,19 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       checkColor: const Color.fromARGB(255, 247, 246, 246),
                       activeColor: Colors.pink,
                       value: todo.done,
-                      onChanged: (_) => todoProvider.toggleDone(todo),
+                      onChanged: (_) async {
+                        try {
+                          await todoProvider.toggleDone(todo);
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Kunde inte uppdatera Todo. Kontrollera nätverket.'),
+                            backgroundColor: Colors.pink,
+                            ),
+                          );
+                        }
+                      },
+
                     ),
                     title: Text(
                       todo.title,

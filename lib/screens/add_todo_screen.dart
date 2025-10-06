@@ -43,7 +43,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context), //går tillbaka utan att lägga till
+                  onPressed: () => Navigator.pop(context, null), // Explicitly return null
                   child: const Text('Tillbaka', style: TextStyle(color: Colors.pink)),
                 ),
                 const SizedBox(width: 10),
