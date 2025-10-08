@@ -55,19 +55,23 @@ class TodoProvider with ChangeNotifier { //provider för att hantera todo-listan
   }
 
   Future<void> toggleDone(Todo todo) async {
-    final previousDone = todo.done;
+  try {
+    await ApiService.updateTodo(
+      Todo(
+        id: todo.id,
+        title: todo.title,
+        done: !todo.done,
+      ),
+    );
+
     todo.done = !todo.done;
     notifyListeners();
+  } catch (e) {
+    print("Fel vid toggleDone: $e");
+    rethrow;
+  }
+}
 
-    try {
-      await ApiService.updateTodo(todo);
-    } catch (e) {
-      todo.done = previousDone; //återställ om det misslyckas
-      notifyListeners();
-      print("Fel vid toggleDone: $e");
-
-      throw Exception("Kunde inte uppdatera Todo");
-    }
 
   Future<void> deleteTodo(Todo todo) async {
     try {
@@ -81,4 +85,3 @@ class TodoProvider with ChangeNotifier { //provider för att hantera todo-listan
 }
 
   void deleteTodo(Todo todo) {}
-}
